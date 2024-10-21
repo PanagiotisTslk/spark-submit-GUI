@@ -1,0 +1,62 @@
+# Configuration file for docker
+version: '3.1'
+
+services:
+
+  mongo:
+    image: mongo:7.0
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: $DB_USERNAME
+      MONGO_INITDB_ROOT_PASSWORD: $DB_PASSWORD
+      MONGO_INITDB_DATABASE: Kubernetes
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
+      - mongo_vol:/data/db
+
+  kubernetes-api:
+    image: kubernetes-api:v0.1
+    build: ./backend
+    container_name: api
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      DB_URL: mongo
+      DB_USERNAME: $DB_USERNAME
+      DB_PASSWORD: $DB_PASSWORD
+      DB_NAME: Kubernetes
+      DB_PORT: 27017
+      PROXMOX: $PROXMOX
+    volumes:
+      - uploads_vol:/KubernetesAPI/backend/uploads
+
+  kubernetes-ui:
+    image: nginx:latest
+    container_name: ui
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+
+  kubernetes-executor:
+    image: kubernetes-executor:v0.1
+    build: ./executor
+    container_name: executor
+    restart: always
+    environment:
+      DB_URL: mongo
+      DB_USERNAME: $DB_USERNAME
+      DB_PASSWORD: $DB_PASSWORD
+      DB_NAME: Kubernetes
+      DB_PORT: 27017
+
+volumes:
+  mongo_vol:
+    external: true
+  uploads_vol:
+    external: true
