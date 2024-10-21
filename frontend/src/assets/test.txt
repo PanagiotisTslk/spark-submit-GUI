@@ -1,0 +1,224 @@
+<!--            <td mat-cell *matCellDef="let element"> Spark Path: {{element.job.spark_path}}<br>-->
+<!--              Master: {{element.job.master}}<br>-->
+<!--              Deploy Mode: {{element.job.deployMode}}<br>Name: {{element.job.name}}<br>-->
+<!--              Class: {{element.job.class}}<br>Executable: {{element.job.executable}}<br>-->
+<!--              Configurations: {{element.job.conf.spark_executor_cores}}-->
+<!--            </td>-->
+
+  isSelected = false;
+  optionsToCheck = ['spark_path', 'master', 'deploy-mode', 'name', 'class',
+    'spark.executor.instances', 'spark.executor.cores', 'spark.executor.memory',
+    'spark.kubernetes.container.image', 'spark.kubernetes.driver.node.selector.kubernetes.io/hostname',
+    'spark.kubernetes.authenticate.driver.serviceAccountName', 'executable'];
+
+ SelectJob(row: Jobs) {
+    // console.log(row);
+    if (this.selected_row[0] === row){
+      this.selected_row.pop();
+      console.log(this.selected_row);
+      console.log('Row already selected!');
+    }
+    else {
+      this.isSelected = !this.isSelected;
+      this.selected_row.pop();
+      this.selected_row.push(row);
+      console.log(this.selected_row);
+    }
+ }
+
+ CheckOption(event: any, option: string){
+    console.log('Checking option...');
+    // console.log(option);
+    console.log(event);
+    if (event.checked){
+      this.optionsToUpdate.push(option);
+      console.log(option);
+    }
+    else {
+      // Finding the index of job_id inside list to delete it
+      const index = this.optionsToUpdate.indexOf(option, 0);
+      if (index > -1) {
+        this.optionsToUpdate.splice(index, 1);
+      }
+    }
+   console.log(JSON.stringify(this.optionsToUpdate));
+ }
+
+
+
+  <!-- Tab with table of jobs, refresh & update button -->
+<!--  <mat-tab label="Update Job">-->
+<!--    <mat-card>-->
+<!--      <mat-card-content>-->
+<!--        &lt;!&ndash;    Search field    &ndash;&gt;-->
+<!--        <mat-form-field class="center">-->
+<!--          <mat-label>Filter</mat-label>-->
+<!--          <input matInput (keyup)="applyFilter($event)" placeholder="Ex. 65cb92aaf3439a08935e28ec" #input>-->
+<!--        </mat-form-field>-->
+<!--        &lt;!&ndash;    Table with jobs    &ndash;&gt;-->
+<!--        <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">-->
+<!--          &lt;!&ndash; Position Column &ndash;&gt;-->
+<!--          <ng-container matColumnDef="position">-->
+<!--            <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>-->
+<!--            <td mat-cell *matCellDef="let element"> {{element.position}}</td>-->
+<!--          </ng-container>-->
+<!--          &lt;!&ndash; Job id Column &ndash;&gt;-->
+<!--          <ng-container matColumnDef="job_id">-->
+<!--            <th mat-header-cell *matHeaderCellDef mat-sort-header> Job ID </th>-->
+<!--            <td mat-cell *matCellDef="let element">-->
+<!--              {{element.job_id}}-->
+<!--              &lt;!&ndash; Copy button &ndash;&gt;-->
+<!--              <button cdkCopyToClipboard="{{element.job_id}}" mat-fab color="primary" aria-label="Copy" style="margin: 10px">-->
+<!--                <mat-icon>filter_none</mat-icon>-->
+<!--              </button>-->
+<!--            </td>-->
+<!--          </ng-container>-->
+<!--          &lt;!&ndash; User Column &ndash;&gt;-->
+<!--          <ng-container matColumnDef="user">-->
+<!--            <th mat-header-cell *matHeaderCellDef> User </th>-->
+<!--            <td mat-cell *matCellDef="let element"> {{element.user}} </td>-->
+<!--          </ng-container>-->
+<!--          &lt;!&ndash; Timestamp Column &ndash;&gt;-->
+<!--          <ng-container matColumnDef="timestamp">-->
+<!--            <th mat-header-cell *matHeaderCellDef mat-sort-header> Timestamp </th>-->
+<!--            <td mat-cell *matCellDef="let element"> {{element.timestamp}} </td>-->
+<!--          </ng-container>-->
+<!--          &lt;!&ndash; Job Column &ndash;&gt;-->
+<!--          <ng-container matColumnDef="job">-->
+<!--            <th mat-header-cell *matHeaderCellDef> Job </th>-->
+<!--            <th mat-header-cell *matHeaderCellDef> Job Options </th>-->
+<!--            <td mat-cell *matCellDef="let element">-->
+<!--              <mat-label>Spark Path: {{element.job.spark_path}}</mat-label>-->
+<!--              <mat-divider></mat-divider>-->
+<!--              <mat-label>Master: {{element.job.master}}</mat-label>-->
+<!--              <mat-divider></mat-divider>-->
+<!--              <mat-label>Deploy Mode: {{element.job.deployMode}}</mat-label>-->
+<!--              <mat-divider></mat-divider>-->
+<!--              <mat-label>Name: {{element.job.name}}</mat-label>-->
+<!--              <mat-divider></mat-divider>-->
+<!--              <mat-label>Class: {{element.job.class}}</mat-label>-->
+<!--              <mat-divider></mat-divider>-->
+<!--              <mat-label>Configurations: {{element.job.conf.spark_executor_cores}}</mat-label>-->
+<!--              <mat-divider></mat-divider>-->
+<!--              <mat-label>Executable: {{element.job.executable}}</mat-label>-->
+<!--            </td>-->
+<!--          </ng-container>-->
+<!--          &lt;!&ndash; Headers &ndash;&gt;-->
+<!--          <tr mat-header-row *matHeaderRowDef="jobsColumns"></tr>-->
+<!--          <tr-->
+<!--            mat-row-->
+<!--            (click)="SelectJob(row)"-->
+<!--            *matRowDef="let row; columns: jobsColumns;"-->
+<!--            [ngClass]="{'make-purple': this.selected_row[0] === row}"-->
+<!--          ></tr>-->
+<!--          &lt;!&ndash; Row shown when there is no matching data. &ndash;&gt;-->
+<!--          <tr class="mat-row" *matNoDataRow>-->
+<!--            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>-->
+<!--          </tr>-->
+<!--        </table>-->
+<!--        <br>-->
+<!--        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of jobs"></mat-paginator>-->
+<!--        <br>-->
+<!--        &lt;!&ndash;    Refresh button for table with jobs    &ndash;&gt;-->
+<!--        <button mat-fab (click)="RetrieveJobs()" class="center" color="primary" aria-label="Refresh table">-->
+<!--          <mat-icon>refresh</mat-icon>-->
+<!--        </button>-->
+<!--        <br>-->
+<!--        <mat-accordion>-->
+<!--          <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>-->
+<!--            <mat-expansion-panel-header>-->
+<!--              <mat-panel-title>-->
+<!--                Options-->
+<!--              </mat-panel-title>-->
+<!--              <mat-panel-description>-->
+<!--                Check options to update-->
+<!--              </mat-panel-description>-->
+<!--            </mat-expansion-panel-header>-->
+<!--            <ng-container>-->
+<!--              <section>-->
+<!--                @for (option of optionsToCheck; track option) {-->
+<!--                  <mat-checkbox color="primary" (change)="CheckOption($event, option)">{{option}}</mat-checkbox>-->
+<!--                  <mat-divider></mat-divider>-->
+<!--                }-->
+<!--              </section>-->
+<!--            </ng-container>-->
+<!--            <mat-action-row>-->
+<!--              <button mat-button color="primary" (click)="nextStep()">Next</button>-->
+<!--            </mat-action-row>-->
+<!--          </mat-expansion-panel>-->
+<!--          <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>-->
+<!--            <mat-expansion-panel-header>-->
+<!--              <mat-panel-title>-->
+<!--                Values-->
+<!--              </mat-panel-title>-->
+<!--              <mat-panel-description>-->
+<!--                Give values of options to update-->
+<!--              </mat-panel-description>-->
+<!--            </mat-expansion-panel-header>-->
+<!--            <ng-container>-->
+<!--              <section>-->
+<!--                @for (option of optionsToUpdate; track option) {-->
+<!--                  <mat-form-field>-->
+<!--                    <mat-label>{{option}}</mat-label>-->
+<!--                    <input matInput [(ngModel)] = "new_options[option]">-->
+<!--                  </mat-form-field>-->
+<!--                  <mat-divider></mat-divider>-->
+<!--                  <br>-->
+<!--                }-->
+<!--              </section>-->
+<!--            </ng-container>-->
+<!--            <mat-action-row>-->
+<!--              <button mat-button color="warn" (click)="prevStep()">Previous</button>-->
+<!--              <button mat-button color="primary" (click)="nextStep()">End</button>-->
+<!--            </mat-action-row>-->
+<!--          </mat-expansion-panel>-->
+<!--        </mat-accordion>-->
+<!--        <br>-->
+<!--        <button mat-fab (click)="this.openDialog('Do you want to update the job?', 'update');" class="center" color="primary" aria-label="Delete jobs">-->
+<!--          <mat-icon>update</mat-icon>-->
+<!--        </button>-->
+<!--      </mat-card-content>-->
+<!--    </mat-card>-->
+<!--  </mat-tab>-->
+
+
+// DEPLOY MODE & MASTER
+<!--   Spark Submit Path   -->
+      <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Spark Submit Path
+          </mat-panel-title>
+          <mat-panel-description>
+            Add the path of spark submit command
+            <mat-icon>map</mat-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-form-field>
+          <mat-label>Path</mat-label>
+          <input matInput [(ngModel)]="newJob.sparkPath">
+        </mat-form-field>
+        <mat-action-row>
+          <button mat-button color="primary" (click)="nextStep()">Next</button>
+        </mat-action-row>
+      </mat-expansion-panel>
+      <!--   Master   -->
+      <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Master
+          </mat-panel-title>
+          <mat-panel-description>
+            Master to execute
+            <mat-icon>dns</mat-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-form-field>
+          <mat-label>Url</mat-label>
+          <input matInput [(ngModel)]="newJob.options.master">
+        </mat-form-field>
+        <mat-action-row>
+          <button mat-button color="warn" (click)="prevStep()">Previous</button>
+          <button mat-button color="primary" (click)="nextStep()">Next</button>
+        </mat-action-row>
+      </mat-expansion-panel>

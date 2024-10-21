@@ -1,0 +1,320 @@
+<mat-toolbar color="primary">
+  <span>Kubernetes API</span>
+  <span class="header-spacer"></span>
+  <mat-icon matTooltip="User" color="warn">person</mat-icon>
+  <!-- Username -->
+  <span class="header-icon">{{user}}</span>
+  <!-- Logout button -->
+  <button mat-mini-fab matTooltip="Logout" (click)="this.openDialog('Do you want to logout?', 'logout');" color="white" aria-label="Logout">
+    <mat-icon color="primary">logout</mat-icon>
+  </button>
+</mat-toolbar>
+<!-- New job page button -->
+<br>
+<br>
+<span class="header-icon"></span>
+<button mat-mini-fab (click)="ChangePage('user-menu')" color="primary" aria-label="Move to new-job page">
+  <mat-icon>chevron_left</mat-icon>
+</button>
+<br>
+<br>
+  <form [formGroup]="dynamicForm">
+  <mat-card>
+    <mat-card-content>
+      <button mat-button color="primary" class="center" ejs-button cssClass='e-link'><a href="https://spark.apache.org/docs/latest/running-on-kubernetes.html" target='_blank'>See spark-submit options</a></button>
+      <span class="header-icon"></span>
+      <br>
+      <mat-label class="center" style="color: darkblue; font-size: medium">Job ID: {{job.id}}</mat-label>
+      <span class="header-icon"></span>
+      <mat-accordion class="example-headers-align">
+        <!--   Deploy Mode   -->
+        <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Deploy Mode
+            </mat-panel-title>
+            <mat-panel-description>
+              Mode of deployment
+              <mat-icon>device_hub</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-form-field>
+            <mat-label>Current Mode: {{this.job.options.deployMode}}</mat-label>
+            <mat-select formControlName="deployMode" placeholder="Change to:">
+              @for (mode of deploy_modes; track mode) {
+                <mat-option [value]="mode">{{mode}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-action-row>
+            <button mat-button color="warn" (click)="prevStep()">Previous</button>
+            <button mat-button color="primary" (click)="nextStep()">Next</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+        <!--   Name   -->
+        <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)" hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Name
+            </mat-panel-title>
+            <mat-panel-description>
+              Name of job
+              <mat-icon>person_outline</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name">
+          </mat-form-field>
+          <mat-action-row>
+            <button mat-button color="warn" (click)="prevStep()">Previous</button>
+            <button mat-button color="primary" (click)="nextStep()">Next</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+        <!--   Class   -->
+        <mat-expansion-panel [expanded]="step === 4" (opened)="setStep(4)" hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Class
+            </mat-panel-title>
+            <mat-panel-description>
+              Main class of executable
+              <mat-icon>developer_board</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-form-field>
+            <mat-label>Class</mat-label>
+            <input matInput formControlName="class">
+          </mat-form-field>
+          <mat-action-row>
+            <button mat-button color="warn" (click)="prevStep()">Previous</button>
+            <button mat-button color="primary" (click)="nextStep()">Next</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+        <!--   Instances   -->
+        <mat-expansion-panel [expanded]="step === 5" (opened)="setStep(5)" hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Instances
+            </mat-panel-title>
+            <mat-panel-description>
+              Number of instances to execute
+              <mat-icon>memory</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-form-field>
+            <mat-label>Instances</mat-label>
+            <input matInput type="number" min="1" max="10" formControlName="instances">
+          </mat-form-field>
+          <mat-action-row>
+            <button mat-button color="warn" (click)="prevStep()">Previous</button>
+            <button mat-button color="primary" (click)="nextStep()">Next</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+        <!--   Cores   -->
+        <mat-expansion-panel [expanded]="step === 6" (opened)="setStep(6)" hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Cores
+            </mat-panel-title>
+            <mat-panel-description>
+              Number of cores for each instance
+              <mat-icon>memory</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-form-field>
+            <mat-label>Cores</mat-label>
+            <input matInput type="number" min="1" max="10" formControlName="cores">
+          </mat-form-field>
+          <mat-action-row>
+            <button mat-button color="warn" (click)="prevStep()">Previous</button>
+            <button mat-button color="primary" (click)="nextStep()">Next</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+        <!--   Memory   -->
+        <mat-expansion-panel [expanded]="step === 7" (opened)="setStep(7)" hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Memory
+            </mat-panel-title>
+            <mat-panel-description>
+              Capacity of memory for each instance
+              <mat-icon>memory</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+            <mat-form-field>
+              <mat-label>Current Capacity: {{this.job.options.conf['spark.executor.memory']}}</mat-label>
+              <mat-select formControlName="memory" placeholder="Change to:">
+                @for (capacity of capacities; track capacity) {
+                  <!--                  @if (capacity === '512'){-->
+                  <mat-option [value]="capacity">{{capacity.concat(measure[0].toString())}}</mat-option>
+                  <!--                }-->
+                    <!--                  @else {-->
+                    <!--                    <mat-option [value]="capacity">{{(+capacity + measure[1]).toString()}}</mat-option>-->
+                    <!--                  }-->
+                }
+              </mat-select>
+            </mat-form-field>
+          <mat-action-row>
+            <button mat-button color="warn" (click)="prevStep()">Previous</button>
+            <button mat-button color="primary" (click)="nextStep()">Next</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+        <!--   Image   -->
+        <mat-expansion-panel [expanded]="step === 8" (opened)="setStep(8)" hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Image
+            </mat-panel-title>
+            <mat-panel-description>
+              Image for container
+              <mat-icon>crop_original</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-form-field>
+            <mat-label>Image</mat-label>
+            <input matInput formControlName="image">
+          </mat-form-field>
+          <mat-action-row>
+            <button mat-button color="warn" (click)="prevStep()">Previous</button>
+            <button mat-button color="primary" (click)="nextStep()">Next</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+        <!--   Hostname   -->
+        <mat-expansion-panel [expanded]="step === 9" (opened)="setStep(9)" hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Hostname
+            </mat-panel-title>
+            <mat-panel-description>
+              Hostname of kubernetes cluster
+              <mat-icon>dns</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-form-field>
+            <mat-label>DNS</mat-label>
+            <input matInput formControlName="hostname">
+          </mat-form-field>
+          <mat-action-row>
+            <button mat-button color="warn" (click)="prevStep()">Previous</button>
+            <button mat-button color="primary" (click)="nextStep()">Next</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+        <!--   Service Account Name   -->
+        <mat-expansion-panel [expanded]="step === 10" (opened)="setStep(10)" hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Service Account Name
+            </mat-panel-title>
+            <mat-panel-description>
+              Name for the type of job
+              <mat-icon>public</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-form-field>
+            <mat-label>Service account name</mat-label>
+            <input matInput formControlName="serviceAccountName">
+          </mat-form-field>
+          <mat-action-row>
+            <button mat-button color="warn" (click)="prevStep()">Previous</button>
+            <button mat-button color="primary" (click)="nextStep()">Next</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+        <!--   Executable Path   -->
+        <mat-expansion-panel [expanded]="step === 11" (opened)="setStep(11)" hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Executable Path
+            </mat-panel-title>
+            <mat-panel-description>
+              Add the path of executable file
+              <mat-icon>map</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-form-field>
+            <mat-label>Path</mat-label>
+            <input matInput formControlName="executablePath">
+          </mat-form-field>
+          <mat-action-row>
+            <button mat-button color="warn" (click)="prevStep()">Previous</button>
+            <button mat-button color="primary" (click)="nextStep()">End</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+        <!--   Executable File   -->
+        <mat-expansion-panel [expanded]="step === 12" (opened)="setStep(12)" hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Executable File
+            </mat-panel-title>
+            <mat-panel-description>
+              Upload the executable file
+              <mat-icon>attach_file</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload formControlName="executableFile" name="spark_exe">
+          <div class="file-upload">{{fileName || "No file uploaded yet."}}
+            <br>
+            <hr>
+            <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
+              <mat-icon>attach_file</mat-icon>
+            </button>
+            &nbsp;
+            <button mat-mini-fab color="primary" class="delete-btn" (click)="deleteUpload()">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+          <!--    Last field    -->
+          <mat-action-row>
+            <button mat-button color="warn" (click)="prevStep()">Previous</button>
+            <button mat-button color="primary" (click)="nextStep()">Next</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+        <!--   Additional Options   -->
+        <mat-expansion-panel [expanded]="step === 13" (opened)="setStep(13)" hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Additional Options
+            </mat-panel-title>
+            <mat-panel-description>
+              Add additional configuration options
+              <mat-icon>add</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div formArrayName="additionalOptions">
+            <div *ngFor="let conf of additionalOptions.controls; let i=index;">
+              <div [formGroupName]="i">
+                <mat-form-field>
+                  <mat-label>Configuration Key {{i+1}}</mat-label>
+                  <input matInput type="text" class="form-control" formControlName="confKey"/>
+                </mat-form-field>
+                &nbsp;
+                <mat-form-field>
+                  <mat-label>Configuration Value {{i+1}}</mat-label>
+                  <input matInput type="text" class="form-control" formControlName="confValue"/>
+                </mat-form-field>
+                &nbsp;
+                <button mat-mini-fab (click)="removeOption(i)" color="primary" aria-label="Remove option">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <button mat-mini-fab (click)="addOption()" class="center" color="primary" aria-label="Add option">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+          <mat-action-row>
+            <button mat-button color="warn" (click)="prevStep()">Previous</button>
+            <button mat-button color="primary" (click)="printForm()">End</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <!-- Add job button -->
+      <br>
+      <button mat-fab (click)="this.openDialog('Do you want to update the job?', 'update');" class="center" color="primary" aria-label="Add job">
+        <mat-icon>check</mat-icon>
+      </button>
+    </mat-card-content>
+  </mat-card>
+</form>

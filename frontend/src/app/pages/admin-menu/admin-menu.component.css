@@ -1,0 +1,53 @@
+table {
+  width: 100%;
+}
+
+.example-headers-align .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.example-headers-align .mat-mdc-form-field + .mat-mdc-form-field {
+  margin-left: 8px;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  left: 45%;
+}
+
+.right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  left: 85%;
+}
+
+.mat-mdc-row .mat-mdc-cell {
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  cursor: pointer;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  border-color: currentColor;
+}
+
+.demo-row-is-clicked {
+  font-weight: bold;
+  border-color: aqua;
+}
+
+.make-purple {
+  background-color: #CBC3E3;
+}
+
+.header-spacer {
+  flex: 1 1 auto;
+}
+
+.header-icon {
+  padding: 0 14px;
+}

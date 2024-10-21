@@ -1,0 +1,22 @@
+<!--<mat-card-title style="text-align: center; font-size: 30px; color: darkviolet">LOGIN MENU</mat-card-title>-->
+<mat-card style="background-color: white">
+  <mat-card-content class="center">
+    <form class="login-form">
+        <mat-label style="color: darkviolet; font-size: 30px">Login Menu</mat-label>
+        <br>
+        <br>
+        <mat-form-field class="login-full-width">
+          <mat-label>Username</mat-label>
+          <input type="text" name="username" matInput placeholder="Ex. user1" [(ngModel)]="requestBody.username">
+        </mat-form-field>
+        <mat-form-field class="login-full-width">
+          <mat-label>Password</mat-label>
+          <input [type]="passwordVisible ? 'text' : 'password'" name="password" matInput placeholder="Ex. pass" [(ngModel)]="requestBody.password">
+          <button mat-icon-button color="primary" matSuffix (click)="passwordVisible = !passwordVisible">
+            <mat-icon>{{passwordVisible ? 'visibility' : 'visibility_off'}}</mat-icon>
+          </button>
+        </mat-form-field>
+      <button mat-flat-button color="primary" (click)="ValidateUser()">Login</button>
+    </form>
+  </mat-card-content>
+</mat-card>

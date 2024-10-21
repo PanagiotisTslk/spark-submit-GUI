@@ -1,0 +1,64 @@
+<form [formGroup]="dynamicForm">
+  <mat-card>
+    <mat-card-content>
+      <mat-accordion class="example-headers-align">
+        <!--   Instances   -->
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Instances
+            </mat-panel-title>
+            <mat-panel-description>
+              Number of instances to execute
+              <mat-icon>memory</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-form-field>
+            <mat-label>Instances</mat-label>
+            <input matInput type="number" min="1" max="10" formControlName="instances">
+          </mat-form-field>
+        </mat-expansion-panel>
+        <br>
+        <!--   Additional Option   -->
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Additional Options
+            </mat-panel-title>
+            <mat-panel-description>
+              Add configuration option
+              <mat-icon>add</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div formArrayName="additionalOptions">
+            <div *ngFor="let conf of additionalOptions.controls; let i=index;">
+              <div [formGroupName]="i">
+                <mat-form-field>
+                  <mat-label>Configuration Key {{i+1}}</mat-label>
+                  <input matInput type="text" class="form-control" formControlName="confKey"/>
+                </mat-form-field>
+                &nbsp;
+                <mat-form-field>
+                  <mat-label>Configuration Value {{i+1}}</mat-label>
+                  <input matInput type="text" class="form-control" formControlName="confValue"/>
+                </mat-form-field>
+                &nbsp;
+                <button mat-mini-fab (click)="removeOption(i)" class="center" color="primary" aria-label="Remove option">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          <mat-action-row>
+            <button mat-mini-fab (click)="addOption()" class="center" color="primary" aria-label="Add option">
+              <mat-icon>add</mat-icon>
+            </button>
+          </mat-action-row>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </mat-card-content>
+  </mat-card>
+  <button mat-mini-fab (click)="readOptions()" class="center" color="primary" aria-label="Add option">
+    <mat-icon>add</mat-icon>
+  </button>
+</form>

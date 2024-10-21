@@ -1,0 +1,25 @@
+.login-form {
+  min-width: 100px;
+  max-width: 300px;
+  width: 100%;
+  text-align: center;
+}
+
+.login-full-width {
+  width: 100%;
+}
+
+.mat-card {
+  min-width: 100px;
+  max-width: 500px;
+  width: 350px;
+  text-align: center;
+  justify-content: center
+}
+
+.center {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,0 +1,106 @@
+<mat-toolbar color="primary">
+  <span>Kubernetes API</span>
+  <span class="header-spacer"></span>
+  <mat-icon matTooltip="User" color="warn">person</mat-icon>
+  <!-- Username -->
+  <span class="header-icon">{{user}}</span>
+  <!-- Logout button -->
+  <button mat-mini-fab matTooltip="Logout" (click)="this.openDialog('Do you want to logout?', 'logout');" color="white" aria-label="Logout">
+    <mat-icon color="primary">logout</mat-icon>
+  </button>
+</mat-toolbar>
+<mat-card>
+  <mat-card-content>
+    <!--    Search field    -->
+    <mat-form-field>
+      <mat-label>Filter</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Search Job ID" #input [(ngModel)]="filter_input">
+      <button mat-icon-button color="primary" matSuffix (click)="ClearFilter();">
+        <mat-icon>clear</mat-icon>
+      </button>
+    </mat-form-field>
+    <!-- Space between button and filter -->
+    <span class="header-icon"></span>
+    <button mat-mini-fab (click)="ChangePage('new-job')" color="primary" aria-label="Move to new-job page">
+      <mat-icon>add</mat-icon>
+    </button>
+    <!-- Space between buttons -->
+    <span class="header-icon"></span>
+    <!-- Delete button for table with jobs -->
+    <button mat-mini-fab (click)="this.openDialog('Do you want to delete the selected jobs?','delete');" color="primary" aria-label="Delete jobs">
+      <mat-icon>delete</mat-icon>
+    </button>
+    <!-- Space between buttons -->
+    <span class="header-icon"></span>
+    <!--    Refresh button for table with jobs    -->
+    <button mat-mini-fab (click)="RetrieveJobs()" color="primary" aria-label="Refresh table">
+      <mat-icon>refresh</mat-icon>
+    </button>
+<!--    Table with jobs    -->
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+      <!-- Position Column -->
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-checkbox color="primary" (change)="CheckJob($event, element.job_id)"></mat-checkbox>   {{element.position}}</td>
+      </ng-container>
+      <!-- Job id Column -->
+      <ng-container matColumnDef="job_id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Job ID </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.job_id}}
+          <!-- Space between buttons -->
+          <span class="header-icon"></span>
+          <!-- Copy button -->
+          <button cdkCopyToClipboard="{{element.job_id}}" mat-mini-fab color="primary" aria-label="Copy">
+            <mat-icon>insert_link</mat-icon>
+          </button>
+          <!-- Space between buttons -->
+          <span class="header-icon"></span>
+          <!-- Edit button -->
+          <button (click)="ChangePage('edit-job/' + element.job_id);" mat-mini-fab color="primary" aria-label="Edit">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef> Status </th>
+        <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+      </ng-container>
+      <!-- Timestamp Column -->
+      <ng-container matColumnDef="timestamp">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Timestamp </th>
+        <td mat-cell *matCellDef="let element"> {{element.timestamp}} </td>
+      </ng-container>
+      <!-- Job Column -->
+      <ng-container matColumnDef="job">
+        <th mat-header-cell *matHeaderCellDef> Job Options </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-label>Spark Path: {{element.job.spark_path}}</mat-label>
+          <mat-divider></mat-divider>
+          <mat-label>Master: {{element.job.master}}</mat-label>
+          <mat-divider></mat-divider>
+          <mat-label>Deploy Mode: {{element.job["deploy-mode"]}}</mat-label>
+          <mat-divider></mat-divider>
+          <mat-label>Name: {{element.job.name}}</mat-label>
+          <mat-divider></mat-divider>
+          <mat-label>Class: {{element.job.class}}</mat-label>
+          <mat-divider></mat-divider>
+          <mat-label>Configurations: {{element.job.conf["spark.executor.cores"]}}</mat-label>
+          <mat-divider></mat-divider>
+          <mat-label>Executable: {{element.job.executable}}</mat-label>
+        </td>
+      </ng-container>
+      <!-- Headers -->
+      <tr mat-header-row *matHeaderRowDef="jobsColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: jobsColumns;"></tr>
+<!--           Row shown when there is no matching data.-->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+      </tr>
+    </table>
+    <br>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of jobs"></mat-paginator>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,208 @@
+[{
+  "_id": {
+    "$oid": "657c8281bbbff2b61e127e0d"
+  },
+  "name": "deploy-mode",
+  "conf": false,
+  "required": true,
+  "values": {
+    "type": "str",
+    "default": "cluster",
+    "range": [
+      [
+        "cluster",
+        "client"
+      ]
+    ]
+  }
+},
+{
+  "_id": {
+    "$oid": "6580abc8284e07f71fdc294b"
+  },
+  "name": "master",
+  "conf": false,
+  "required": true,
+  "values": {
+    "type": "str",
+    "default": null,
+    "range": [
+      [
+        ""
+      ]
+    ]
+  }
+},
+{
+  "_id": {
+    "$oid": "6580acb7b9f0bbfea0badfb9"
+  },
+  "name": "name",
+  "conf": false,
+  "required": true,
+  "values": {
+    "type": "str",
+    "default": null,
+    "range": [
+      [
+        ""
+      ]
+    ]
+  }
+},
+{
+  "_id": {
+    "$oid": "6580acd4b9f0bbfea0badfbc"
+  },
+  "name": "class",
+  "conf": false,
+  "required": true,
+  "values": {
+    "type": "str",
+    "default": null,
+    "range": [
+      [
+        ""
+      ]
+    ]
+  }
+},
+{
+  "_id": {
+    "$oid": "6580ad3bb9f0bbfea0badfbf"
+  },
+  "name": "spark.executor.instances",
+  "conf": true,
+  "required": true,
+  "values": {
+    "type": "int",
+    "default": "1",
+    "range": [
+      [
+        "1",
+        "10"
+      ]
+    ]
+  }
+},
+{
+  "_id": {
+    "$oid": "6580af0cb9f0bbfea0badfc8"
+  },
+  "name": "spark.executor.cores",
+  "conf": true,
+  "required": true,
+  "values": {
+    "type": "int",
+    "default": "1",
+    "range": [
+      [
+        "1",
+        "8"
+      ]
+    ]
+  }
+},
+{
+  "_id": {
+    "$oid": "6580af4fb9f0bbfea0badfcb"
+  },
+  "name": "spark.executor.memory",
+  "conf": true,
+  "required": true,
+  "values": {
+    "type": "int",
+    "default": "512",
+    "range": [
+      [
+        "512",
+        "10240"
+      ]
+    ]
+  }
+},
+{
+  "_id": {
+    "$oid": "6580af84b9f0bbfea0badfce"
+  },
+  "name": "spark.kubernetes.container.image",
+  "conf": true,
+  "required": true,
+  "values": {
+    "type": "str",
+    "default": "apache/spark:3.5.0",
+    "range": [
+      [
+        ""
+      ]
+    ]
+  }
+},
+{
+  "_id": {
+    "$oid": "6580afbab9f0bbfea0badfd1"
+  },
+  "name": "spark.kubernetes.driver.node.selector.kubernetes.io/hostname",
+  "conf": true,
+  "required": true,
+  "values": {
+    "type": "str",
+    "default": "k8s-1",
+    "range": [
+      [
+        ""
+      ]
+    ]
+  }
+},
+{
+  "_id": {
+    "$oid": "6580afe7b9f0bbfea0badfd4"
+  },
+  "name": "spark.kubernetes.authenticate.driver.serviceAccountName",
+  "conf": true,
+  "required": true,
+  "values": {
+    "type": "str",
+    "default": "spark",
+    "range": [
+      [
+        ""
+      ]
+    ]
+  }
+},
+{
+  "_id": {
+    "$oid": "6580b024b9f0bbfea0badfd7"
+  },
+  "name": "executable",
+  "conf": false,
+  "required": true,
+  "values": {
+    "type": "str",
+    "default": "local:///opt/spark/examples/jars/spark-examples_2.12-3.5.0.jar",
+    "range": [
+      [
+        ""
+      ]
+    ]
+  }
+},
+{
+  "_id": {
+    "$oid": "661d2161f1e03aeabae6a888"
+  },
+  "name": "spark_path",
+  "conf": false,
+  "required": true,
+  "values": {
+    "type": "str",
+    "default": "/opt/spark/bin/spark-submit",
+    "range": [
+      [
+        ""
+      ]
+    ]
+  }
+}]
